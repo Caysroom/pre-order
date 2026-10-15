@@ -9,17 +9,16 @@ window.CAYS_ORDER = {
  "opens": "2026-10-17T14:00:00.000Z",
  "closes": "2026-10-20T16:59:00.000Z",
  "shipStart": "7 Nov 2026",
- "publishedAt": "15 Oct 2026",
+ "publishedAt": "15 Oct 2026, 23:45 (Thai time)",
  "maxQ": 5,
  "packaging": 50,
  "buffer": 40,
  "notice": [
-  ["Pre-order: 17 Oct 21:00 – 20 Oct 23:59 (Thai time).", "พรีออเดอร์: 17 ต.ค. 21:00 – 20 ต.ค. 23:59 น."],
-  ["Booth pickup at LYKN REFLEXION CONCERT, 23–25 Oct, 9:00–16:00.", "รับที่บูธ LYKN REFLEXION CONCERT 23–25 ต.ค. เวลา 9:00–16:00 น."],
-  ["Delivery ships from 7 Nov 2026.", "เริ่มจัดส่ง 7 พ.ย. 2569"],
-  ["You pay in the order form, on its payment page. The total is filled in for you. No changes or cancellations after you submit.", "ชำระเงินในหน้าชำระเงินของฟอร์ม ยอดรวมจะกรอกให้แล้ว ไม่สามารถแก้ไขหรือยกเลิกได้หลังส่งฟอร์ม"],
+  ["Add your wishlist.", "เลือกสินค้า"],
   ["Overseas parcels: up to 2 kg per order (USA up to 5 kg).", "พัสดุต่างประเทศ: ไม่เกิน 2 กก. ต่อออเดอร์ (อเมริกาไม่เกิน 5 กก.)"],
-  ["Damaged or missing item? Film an unboxing video and contact CAYSROOM LINE OFFICIAL within 7 days.", "สินค้าชำรุด/ขาด: ถ่ายวิดีโอขณะเปิดพัสดุ และแจ้ง CAYSROOM LINE OFFICIAL ภายใน 7 วัน"]
+  ["Choose your delivery method to calculate shipping.", "เลือกวิธีจัดส่ง เพื่อคำนวนค่าส่ง"],
+  ["Your order summary on the right (below on phones) shows the total you need to pay.", "หน้าจอด้านขวาจะแสดงยอดที่คุณต้องชำระ"],
+  ["Tap “Continue to order form” and our order form opens right away. Once you accept the terms, your items and the amount to pay are filled in for you. Please check everything is correct before paying.", "กด continue to order form เว็บไซต์จะเปลี่ยนเป็น form สั่งซื้อของเราทันที เมื่อคุณกดยอมรับเงื่อนไข ข้อมูลสินค้าที่คุณเลือก และ ยอดที่ต้องชำระ จะถูกกรอกให้คุณอัตโนมัติ กรุณาตรวจสอบความถูกต้องก่อนชำระเงิน"]
  ],
  "products": [
   {
@@ -34,7 +33,7 @@ window.CAYS_ORDER = {
     ["Grey - S", "Grey", "S"], ["Grey - M", "Grey", "M"], ["Grey - L", "Grey", "L"],
     ["Sunny - S", "Sunny", "S"], ["Sunny - M", "Sunny", "M"], ["Sunny - L", "Sunny", "L"]
    ],
-   "weights": { "S": 350, "M": 400, "L": 450 }
+   "weight": 450
   },
   {
    "code": "BT",
@@ -47,7 +46,7 @@ window.CAYS_ORDER = {
     ["Day - S", "Day", "S"], ["Day - M", "Day", "M"], ["Day - L", "Day", "L"],
     ["Night - S", "Night", "S"], ["Night - M", "Night", "M"], ["Night - L", "Night", "L"]
    ],
-   "weights": { "S": 300, "M": 350, "L": 400 }
+   "weight": 400
   },
   {
    "code": "OT",
@@ -60,13 +59,12 @@ window.CAYS_ORDER = {
     ["Sea - S", "Sea", "S"], ["Sea - M", "Sea", "M"], ["Sea - L", "Sea", "L"],
     ["Sand - S", "Sand", "S"], ["Sand - M", "Sand", "M"], ["Sand - L", "Sand", "L"]
    ],
-   "weights": { "S": 500, "M": 550, "L": 600 }
+   "weight": 600
   }
  ],
  "methods": [
   { "id": "PICKUP", "label": "Pick up at the booth (free) / รับที่บูธ (ฟรี)", "sub": "LYKN REFLEXION CONCERT · Fri 23, Sat 24, Sun 25 Oct · 9:00–16:00. Choose your day in the form." },
   { "id": "TH", "label": "Thai address (free) / ส่งในไทย (ฟรี)", "sub": "Door to door in Thailand · ships from 7 Nov" },
-  { "id": "CARGO", "label": "My Thai cargo forwarder (free) / คาร์โก้ของฉัน (ฟรี)", "sub": "To your forwarder's warehouse in Thailand · ships from 7 Nov" },
   { "id": "INTL", "label": "International door-to-door / ส่งต่างประเทศ", "sub": "Fee by parcel weight and country · ships from 7 Nov" }
  ],
  "form": {
@@ -95,7 +93,6 @@ window.CAYS_ORDER = {
   "option": "entry.1936939119",
   "optionValues": {
    "TH": "OPTION 1 - Thai Domestic / ที่อยู่ในประเทศไทย",
-   "CARGO": "OPTION 1 - Thai Domestic / ที่อยู่ในประเทศไทย",
    "INTL": "OPTION 2 - International Shipping / จัดส่งต่างประเทศ"
   },
   "country": "entry.1696074321",

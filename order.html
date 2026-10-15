@@ -134,8 +134,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1.5px solid var(--choc); background: transparent; color: var(--choc); padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; text-decoration: none; }
 .btn.primary { background: var(--choc); color: var(--clay-pale); width: 100%; padding: 14px; font-size: 15px; }
 .btn.primary[aria-disabled="true"] { opacity: .4; pointer-events: none; }
-.why { font-size: 12.5px; color: var(--warn); }
-.after { font-size: 12px; color: var(--smoke); }
+.why:empty { display: none; }
+.alert { font-size: 14.5px; font-weight: 700; line-height: 1.45; padding: 12px 14px; border-radius: 8px; background: #fbe1da; color: #9b2c1f; border: 2px solid #c0533f; display: flex; gap: 10px; align-items: flex-start; }
+.alert::before { content: '!'; flex: none; width: 22px; height: 22px; border-radius: 50%; background: #c0533f; color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 700; }
+.alert .th { display: block; font-weight: 600; font-size: 13px; }
+.bar .lbl.alert-lbl { color: #ffb4a3; font-weight: 700; }
 
 .bar { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: var(--choc); color: var(--clay-pale); padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
 .bar-in { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
@@ -211,7 +214,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
           <div class="meter" id="meter" aria-hidden="true"><div class="fill" id="fill"></div></div>
           <div class="ship-line" id="shipLine" hidden><span id="shipTo"></span><span><span class="amt" id="shipAmt">0</span> THB</span></div>
           <div class="tip" id="tip" hidden></div>
-          <div class="warnbox" id="over" hidden></div>
+          <div class="alert" id="over" role="alert" hidden></div>
         </div>
       </div>
     </section>
@@ -229,8 +232,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
       <div class="r-total"><span><strong>Total</strong><br><span class="cur">ยอดรวม (THB) · pay in the form</span></span><span class="big" id="total">0</span></div>
       <div class="row"><button class="btn" type="button" id="copySummary">Copy order summary</button></div>
       <a class="btn primary" id="go" href="#" target="_blank" rel="noopener" aria-disabled="true">Continue to order form →</a>
-      <p class="why" id="why"></p>
-      <p class="after">The form opens with your items, delivery and total already filled in. Agree to the terms, add your details, then pay on the form's payment page and upload your slip. · ฟอร์มจะกรอกสินค้า วิธีจัดส่ง และยอดรวมให้แล้ว กดยอมรับเงื่อนไข กรอกข้อมูล แล้วชำระเงินและแนบสลิปในหน้าชำระเงินของฟอร์ม</p>
+      <p class="why alert" id="why" role="alert"></p>
     </div>
   </aside>
 </main>
@@ -487,7 +489,7 @@ function start(D) {
       $('tip').hidden = !room.length;
       if (room.length) $('tip').textContent = '✦ Room for one more ' + room.slice(0, 2).join(' or ') + ' at the same shipping price.';
       $('over').hidden = !t.over;
-      if (t.over) $('over').textContent = 'This parcel is ' + fmt(t.grams) + ' g, over the ' + fmt(t.max) + ' g limit for ' + state.country + '. Remove an item, or place a second order for the rest.';
+      if (t.over) { $('over').innerHTML = ''; $('over').appendChild(document.createTextNode('This parcel is ' + fmt(t.grams) + ' g, over the ' + fmt(t.max) + ' g limit for ' + state.country + '. Remove an item, or place a second order for the rest.')); }
     }
     // receipt
     var lb = $('lines'); lb.innerHTML = '';
@@ -510,7 +512,10 @@ function start(D) {
     else if (p === 'closed') why = 'This pre-order is closed. · ปิดรับพรีออเดอร์แล้ว';
     var link = why ? '' : formLink(t);
     if (!why && !link) why = 'The order form is not ready yet. Please try again later.';
-    $('why').textContent = why;
+    var whyEl = $('why'); whyEl.innerHTML = '';
+    if (intl && t.over) { var box = el('span'); box.appendChild(document.createTextNode('Your parcel is over the weight limit.')); box.appendChild(el('span', 'th', 'พัสดุเกินน้ำหนักที่กำหนด กรุณาลดจำนวนสินค้า')); whyEl.appendChild(box); }
+    $('barCount').textContent = intl && t.over ? 'Over weight limit' : (t.items + (t.items === 1 ? ' item' : ' items'));
+    $('barCount').classList.toggle('alert-lbl', intl && t.over);
     $('go').setAttribute('aria-disabled', why ? 'true' : 'false');
     $('go').href = link || '#';
     save();
@@ -532,7 +537,7 @@ function start(D) {
   };
   $('go').addEventListener('click', function (e) {
     if (this.getAttribute('aria-disabled') === 'true') { e.preventDefault(); return; }
-    if (D.demo) { e.preventDefault(); $('why').textContent = 'Preview only: the real page opens the order form with everything filled in.'; }
+    if (D.demo) { e.preventDefault(); }
   });
 
   if (trimmed.length) { $('stockNote').hidden = false; $('stockNote').textContent = 'Stock changed since your last visit, so we updated your cart: ' + trimmed.join(', ') + '.'; }

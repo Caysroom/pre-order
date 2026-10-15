@@ -130,9 +130,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
 .r-total { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; border-top: 1.5px solid var(--ink); padding-top: 10px; }
 .r-total .big { font-family: var(--mono); font-size: 32px; font-weight: 500; line-height: 1; }
 .r-total .cur { font-size: 13px; color: var(--smoke); font-weight: 600; }
-.pay { display: grid; gap: 8px; background: var(--sand); border-radius: 8px; padding: 12px; font-size: 13px; }
-.pay .bank { font-weight: 600; word-break: break-word; }
-.pay img { width: 100%; max-width: 240px; border-radius: 8px; justify-self: center; }
 .row { display: flex; gap: 8px; flex-wrap: wrap; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1.5px solid var(--choc); background: transparent; color: var(--choc); padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; text-decoration: none; }
 .btn.primary { background: var(--choc); color: var(--clay-pale); width: 100%; padding: 14px; font-size: 15px; }
@@ -229,17 +226,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
         <div class="r-line"><span>Items · สินค้า</span><span id="sub">0</span></div>
         <div class="r-line"><span id="shipLbl">Shipping · ค่าส่ง</span><span id="ship">–</span></div>
       </div>
-      <div class="r-total"><span><strong>Total to pay</strong><br><span class="cur">ยอดชำระ (THB)</span></span><span class="big" id="total">0</span></div>
-      <div class="row"><button class="btn" type="button" id="copyTotal">Copy amount</button><button class="btn" type="button" id="copySummary">Copy order summary</button></div>
-      <div class="pay">
-        <span>Step 3 · Pay this exact amount · โอนตามยอดนี้</span>
-        <span class="bank" id="bank"></span>
-        <div class="row"><button class="btn" type="button" id="copyBank">Copy account no.</button></div>
-        <img id="qr" alt="QR code for PromptPay and card payment" hidden>
-      </div>
+      <div class="r-total"><span><strong>Total</strong><br><span class="cur">ยอดรวม (THB) · pay in the form</span></span><span class="big" id="total">0</span></div>
+      <div class="row"><button class="btn" type="button" id="copySummary">Copy order summary</button></div>
       <a class="btn primary" id="go" href="#" target="_blank" rel="noopener" aria-disabled="true">Continue to order form →</a>
       <p class="why" id="why"></p>
-      <p class="after">The form opens with your items, delivery and amount already filled in. Add your details and the payment slip, then submit. · ฟอร์มจะกรอกสินค้าและยอดเงินให้แล้ว เพิ่มข้อมูลและแนบสลิป แล้วกดส่ง</p>
+      <p class="after">The form opens with your items, delivery and total already filled in. Agree to the terms, add your details, then pay on the form's payment page and upload your slip. · ฟอร์มจะกรอกสินค้า วิธีจัดส่ง และยอดรวมให้แล้ว กดยอมรับเงื่อนไข กรอกข้อมูล แล้วชำระเงินและแนบสลิปในหน้าชำระเงินของฟอร์ม</p>
     </div>
   </aside>
 </main>
@@ -247,7 +238,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
 <div class="bar" id="bar" hidden>
   <div class="bar-in">
     <div><div class="lbl" id="barCount">0 items</div><div class="amt" id="barTotal">0 THB</div></div>
-    <a href="#summary">Review &amp; pay ↓</a>
+    <a href="#summary">Review order ↓</a>
   </div>
 </div>
 <div class="foot">Prices in Thai Baht (THB) · Shipping from Thailand · <span id="updated"></span></div>
@@ -525,16 +516,12 @@ function start(D) {
     save();
   }
 
-  /* ---------- payment + copy ---------- */
-  $('bank').textContent = D.bank || '';
-  if (D.qr) { $('qr').src = D.qr; $('qr').hidden = false; }
+  /* ---------- copy (payment happens in the form's payment section) ---------- */
   function copy(text, btn) {
     var o = btn.textContent, done = function () { btn.textContent = 'Copied ✓'; setTimeout(function () { btn.textContent = o; }, 1400); };
     function fb() { var ta = el('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove(); done(); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fb); else fb();
   }
-  $('copyBank').onclick = function () { var m = (D.bank || '').match(/[0-9][0-9-]{6,}[0-9]/); copy(m ? m[0] : (D.bank || ''), this); };
-  $('copyTotal').onclick = function () { copy(String(totals().total), this); };
   $('copySummary').onclick = function () {
     var t = totals(), m = (D.methods || []).filter(function (x) { return x.id === state.method; })[0];
     var lines = ['CAYS · ' + (D.collection || '')].concat(t.lines.map(function (l) { return l.q + ' × ' + l.p.name + ' ' + l.row[0] + ' = ' + fmt(l.q * l.p.price); }));

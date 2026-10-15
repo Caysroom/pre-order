@@ -17,7 +17,7 @@ window.CAYS_ORDER = {
   ["Pre-order: 17 Oct 21:00 – 20 Oct 23:59 (Thai time).", "พรีออเดอร์: 17 ต.ค. 21:00 – 20 ต.ค. 23:59 น."],
   ["Booth pickup at LYKN REFLEXION CONCERT, 23–25 Oct, 9:00–16:00.", "รับที่บูธ LYKN REFLEXION CONCERT 23–25 ต.ค. เวลา 9:00–16:00 น."],
   ["Delivery ships from 7 Nov 2026.", "เริ่มจัดส่ง 7 พ.ย. 2569"],
-  ["Pay the exact total shown here. No changes or cancellations after you submit.", "โอนตามยอดที่แสดง ไม่สามารถแก้ไขหรือยกเลิกได้หลังส่งฟอร์ม"],
+  ["You pay in the order form, on its payment page. The total is filled in for you. No changes or cancellations after you submit.", "ชำระเงินในหน้าชำระเงินของฟอร์ม ยอดรวมจะกรอกให้แล้ว ไม่สามารถแก้ไขหรือยกเลิกได้หลังส่งฟอร์ม"],
   ["Overseas parcels: up to 2 kg per order (USA up to 5 kg).", "พัสดุต่างประเทศ: ไม่เกิน 2 กก. ต่อออเดอร์ (อเมริกาไม่เกิน 5 กก.)"],
   ["Damaged or missing item? Film an unboxing video and contact CAYSROOM LINE OFFICIAL within 7 days.", "สินค้าชำรุด/ขาด: ถ่ายวิดีโอขณะเปิดพัสดุ และแจ้ง CAYSROOM LINE OFFICIAL ภายใน 7 วัน"]
  ],

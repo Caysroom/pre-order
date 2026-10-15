@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CAYS · Shipping Calculators</title>
+<title>CAYS · Pre-Order Foggy Collection</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -181,21 +181,22 @@ body {
 <header class="header">
   <div class="brand">
     <span class="brand-name">CAYS</span>
-    <span class="brand-sub">Worldwide Shipping</span>
+    <span class="brand-sub">Pre-order</span>
   </div>
-  <span class="header-q">Check your shipping cost</span>
 </header>
 
 <div class="clay-bar">
   <span>Ships from Thailand</span>
   <span class="dot">·</span>
-  <span>105 Countries</span>
+  <span>Worldwide</span>
+  <span class="dot">·</span>
+  <span>Booth pickup at LYKN REFLEXION CONCERT</span>
 </div>
 
 <main class="main">
   <div class="page-intro">
-    <h1>Shipping Cost Calculators</h1>
-    <p>Choose your pre-order round below to see how much shipping will cost to your country.</p>
+    <h1>Pre-Order Foggy Collection</h1>
+    <p>Pick your items, see your total with shipping, then complete your order in the form.</p>
   </div>
 
   <!-- Collections render here -->
@@ -203,7 +204,7 @@ body {
 </main>
 
 <div class="foot">
-  Prices in Thai Baht (THB) · Updated January 2026
+  Prices in Thai Baht (THB) · Updated 15 Oct 2026
 </div>
 
 <script>
@@ -218,51 +219,35 @@ body {
      name    : the collection title shown on the page
      status  : "open" (green) | "soon" (clay) | "closed" (muted)  — visual tag
      desc    : a short sentence describing the collection
-     rounds  : a list of calculator cards. Each round card has:
+     opens / closes : optional Thai-time dates; the status tag then switches by itself
+     hideName: true = don't repeat the collection name (when it is the page title)
+     rounds  : a list of cards. Each card has:
          icon  : any emoji  (📦 🧥 👕 🧢 🧦 👜 etc.)
          label : small uppercase tag above the title (e.g. "Round 1")
          title : the card heading (e.g. "Boxset")
          text  : one-line description
-         link  : the .html filename of that calculator (must match GitHub)
+         link  : the page it opens (must match GitHub)
+         cta   : the button text on the card
          active: true = clickable | false = greyed out "coming soon"
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const COLLECTIONS = [
   {
     name:   "Pre-Order Foggy Collection",
+    hideName: true,
     status: "soon",
-    desc:   "Order, see your exact total with shipping, and pay in one place. Booth pickup at LYKN REFLEXION CONCERT, Thai delivery, or worldwide shipping.",
+    opens:  "2026-10-17T21:00:00+07:00",
+    closes: "2026-10-20T23:59:00+07:00",
+    desc:   "Pre-order 17 Oct 21:00 – 20 Oct 23:59 (Thai time). Booth pickup at LYKN REFLEXION CONCERT, Thai delivery, or worldwide shipping from 7 Nov.",
     rounds: [
       {
         icon:  "🌫️",
         label: "Order page",
-        title: "Order & Shipping",
-        text:  "Pick your items, choose your country, see the total with shipping, then fill in the form.",
+        title: "Foggy Collection",
+        text:  "Long Sleeve, Sailing Baby Tee and Oversize Tee. Pick your items and see your total, then complete your order in the form.",
         link:  "order.html?c=foggy",
+        cta:   "Start your order",
         active: true
-      }
-    ]
-  },
-  {
-    name:   "Pre-Order Little Light Collection",
-    status: "opened",
-    desc:   "Our current pre-order. Round 1 ships as a boxset; Round 2 is sold as single items.",
-    rounds: [
-      {
-        icon:  "📦",
-        label: "Round 1",
-        title: "Boxset",
-        text:  "1 Hoodie + 1 Boxy T-shirt shipped together. Just pick your country.",
-        link:  "round1.html",
-        active: true
-      },
-      {
-        icon:  "👕",
-        label: "Round 2",
-        title: "Single Items",
-        text:  "Choose how many hoodies and tees you want, then pick your country.",
-        link:  "round2.html",
-        active: false
       }
     ]
   }
@@ -271,7 +256,7 @@ const COLLECTIONS = [
   ,{
     name:   "Winter Collection 2026",
     status: "soon",
-    desc:   "Launching soon — calculators will go live when pre-orders open.",
+    desc:   "Launching soon.",
     rounds: [
       {
         icon:  "🧥",
@@ -299,7 +284,7 @@ container.innerHTML = COLLECTIONS.map(col => {
     const cls = r.active ? "round-card" : "round-card disabled";
     const href = r.active ? `href="${r.link}"` : "";
     const cta = r.active
-      ? `<span class="round-cta">Open calculator <span class="arrow">→</span></span>`
+      ? (r.cta ? `<span class="round-cta">${r.cta} <span class="arrow">→</span></span>` : '')
       : `<span class="round-cta">Coming soon</span>`;
     return `
       <a class="${cls}" ${href}>
@@ -311,11 +296,16 @@ container.innerHTML = COLLECTIONS.map(col => {
       </a>`;
   }).join('');
 
+  let status = col.status;
+  const now = Date.now();
+  if (col.opens && now < new Date(col.opens).getTime()) status = "soon";
+  else if (col.closes && now >= new Date(col.closes).getTime()) status = "closed";
+  else if (col.opens) status = "open";
   return `
     <section class="collection">
       <div class="collection-head">
-        <span class="collection-name">${col.name}</span>
-        <span class="collection-status ${statusClass[col.status]||''}">${statusText[col.status]||col.status}</span>
+        ${col.hideName ? '' : `<span class="collection-name">${col.name}</span>`}
+        <span class="collection-status ${statusClass[status]||''}">${statusText[status]||status}</span>
       </div>
       <p class="collection-desc">${col.desc}</p>
       <div class="card-grid">${cards}</div>

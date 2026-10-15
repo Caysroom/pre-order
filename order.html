@@ -45,6 +45,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
 .status.closed { background: #efe4e0; color: #9a6b5f; }
 .status .cd { font-family: var(--mono); letter-spacing: 0; text-transform: none; font-weight: 500; }
 
+.notice { margin-top: 16px; background: var(--white); border: 1.5px solid var(--clay); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
+.notice h2 { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--clay-dark); }
+.notice ul { list-style: none; display: grid; gap: 8px; }
+.notice li { font-size: 13.5px; padding-left: 14px; position: relative; }
+.notice li::before { content: ''; position: absolute; left: 0; top: .6em; width: 5px; height: 5px; border-radius: 50%; background: var(--clay); }
+.notice li .th { display: block; color: var(--smoke); font-size: 12.5px; }
 .step-head { display: grid; gap: 2px; }
 .step-no { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--clay-dark); }
 .step-title { font-family: var(--serif); font-weight: 400; font-size: 24px; line-height: 1.2; }
@@ -170,6 +176,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
       <h1 id="title">Collection</h1>
       <p id="period"></p>
       <span class="status" id="status"></span>
+      <div class="notice" id="notice" hidden>
+        <h2>Before you order · อ่านก่อนสั่งซื้อ</h2>
+        <ul id="noticeList"></ul>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="s1">
@@ -293,6 +303,14 @@ function start(D) {
   ['Ships from Thailand', 'Worldwide shipping', D.event ? 'Booth pickup at ' + D.event : ''].filter(Boolean).forEach(function (t, i) {
     if (i) bar.appendChild(el('span', 'dot', '·')); bar.appendChild(el('span', null, t));
   });
+  if (D.notice && D.notice.length) {
+    $('notice').hidden = false;
+    D.notice.forEach(function (n) {
+      var li = el('li'); li.appendChild(document.createTextNode(Array.isArray(n) ? n[0] : n));
+      if (Array.isArray(n) && n[1]) li.appendChild(el('span', 'th', n[1]));
+      $('noticeList').appendChild(li);
+    });
+  }
   $('s1hint').textContent = 'Tap + to add. Up to ' + maxQ + ' per colour and size.' ;
   if (D.sizeGuide) { var sg = el('a', null, ' Size guide →'); sg.href = D.sizeGuide; sg.target = '_blank'; sg.rel = 'noopener'; $('s1hint').appendChild(sg); }
 
@@ -393,13 +411,16 @@ function start(D) {
   renderList('');
 
   /* ---------- maths ---------- */
+  /* Weight per piece: p.weights = { S: 350, M: 400, L: 450 } by size, or one p.weight for every size. */
+  function weightOf(p, r) { return (p.weights && p.weights[r[2]]) || p.weight || 0; }
+  function lightest(p) { var w = p.rows.map(function (r) { return weightOf(p, r); }).filter(Boolean); return w.length ? Math.min.apply(null, w) : 0; }
   var ticks = $('meter');
   function totals() {
     var lines = [], items = 0, sub = 0, grams = 0;
     products.forEach(function (p) {
       p.rows.forEach(function (r) {
         var q = state.qty[k(p.code, r[0])] || 0;
-        if (q > 0) { lines.push({ p: p, row: r, q: q }); items += q; sub += q * p.price; grams += q * (p.weight || 0); }
+        if (q > 0) { lines.push({ p: p, row: r, q: q }); items += q; sub += q * p.price; grams += q * weightOf(p, r); }
       });
     });
     var packed = items ? grams + (D.packaging || 0) : 0;
@@ -417,13 +438,14 @@ function start(D) {
   function freeRoom(t) {  // products that fit in the same shipping price
     if (!t.ready || state.method !== 'INTL') return [];
     return products.filter(function (p) {
-      var g = t.grams + (p.weight || 0);
-      return p.weight && g <= t.max && SHIP.priceFor(t.zone, g, D.buffer || 0) === t.fee;
+      var w = lightest(p), g = t.grams + w;
+      return w && g <= t.max && SHIP.priceFor(t.zone, g, D.buffer || 0) === t.fee;
     }).map(function (p) { return p.name; });
   }
 
   function formLink(t) {
     var m = (D.methods || []).filter(function (x) { return x.id === state.method; })[0]; if (!m) return '';
+    if (D.form) return oneFormLink(t, D.form);
     var f = (D.forms || {})[m.form]; if (!f || !f.url) return '';
     var ps = ['usp=pp_url'];
     t.lines.forEach(function (l) { var e = f.rows && f.rows[l.p.code] && f.rows[l.p.code][l.row[0]]; if (e) ps.push(e + '=' + encodeURIComponent(String(l.q))); });
@@ -433,6 +455,25 @@ function start(D) {
       if (f.fee) ps.push(f.fee + '=' + t.fee);
     }
     if (f.amount) ps.push(f.amount + '=' + t.total);
+    return f.url + (f.url.indexOf('?') < 0 ? '?' : '&') + ps.join('&');
+  }
+
+  /* One Google Form for everyone (v2): the shipping question routes pickup vs delivery,
+     the delivery-option question splits Thai (incl. cargo) vs international. Answers in
+     sections the customer doesn't visit are not sent, so pickup skips fee and country. */
+  function oneFormLink(t, f) {
+    if (!f.url || f.open === false) return '';
+    var ps = ['usp=pp_url'], pickup = state.method === 'PICKUP';
+    function add(entry, val) { if (entry && val !== undefined && val !== null && val !== '') ps.push(entry + '=' + encodeURIComponent(String(val))); }
+    t.lines.forEach(function (l) { add(f.rows && f.rows[l.p.code] && f.rows[l.p.code][l.row[0]], l.q); });
+    add(f.ship, f.shipValues && f.shipValues[pickup ? 'PICKUP' : 'DELIVERY']);
+    if (!pickup) {
+      add(f.option, f.optionValues && f.optionValues[state.method]);
+      if (state.method === 'INTL') add(f.country, state.country);
+      else if (state.method === 'TH' || state.method === 'CARGO') add(f.country, 'Thailand');
+      add(f.fee, t.fee);
+    }
+    add(f.amount, t.total);
     return f.url + (f.url.indexOf('?') < 0 ? '?' : '&') + ps.join('&');
   }
 

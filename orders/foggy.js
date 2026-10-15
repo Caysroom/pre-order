@@ -1,15 +1,26 @@
-/* Published from the CAYS order Sheet on 8 Oct 2026, 23:04 (Thai time). Do not edit by hand. */
+/* Foggy Collection order data (v2: one combined Google Form, weights per size).
+   The back-office Sheet's "Publish to website" button rewrites this file. */
 window.CAYS_ORDER = {
  "key": "foggy",
+ "version": 2,
  "collection": "FOGGY COLLECTION",
- "period": "17–20 OCT 2026, until 23:59 (GMT+7) / 17–20 ต.ค. 2569 ถึง 23:59 น.",
+ "period": "17 Oct 21:00 – 20 Oct 23:59 (Thai time) / 17 ต.ค. 21:00 – 20 ต.ค. 23:59 น.",
  "event": "LYKN REFLEXION CONCERT",
- "opens": "2026-10-16T17:00:00.000Z",
+ "opens": "2026-10-17T14:00:00.000Z",
  "closes": "2026-10-20T16:59:00.000Z",
- "publishedAt": "8 Oct 2026, 23:04 (Thai time)",
+ "shipStart": "7 Nov 2026",
+ "publishedAt": "15 Oct 2026",
  "maxQ": 5,
  "packaging": 50,
  "buffer": 40,
+ "notice": [
+  ["Pre-order: 17 Oct 21:00 – 20 Oct 23:59 (Thai time).", "พรีออเดอร์: 17 ต.ค. 21:00 – 20 ต.ค. 23:59 น."],
+  ["Booth pickup at LYKN REFLEXION CONCERT, 23–25 Oct, 9:00–16:00.", "รับที่บูธ LYKN REFLEXION CONCERT 23–25 ต.ค. เวลา 9:00–16:00 น."],
+  ["Delivery ships from 7 Nov 2026.", "เริ่มจัดส่ง 7 พ.ย. 2569"],
+  ["Pay the exact total shown here. No changes or cancellations after you submit.", "โอนตามยอดที่แสดง ไม่สามารถแก้ไขหรือยกเลิกได้หลังส่งฟอร์ม"],
+  ["Overseas parcels: up to 2 kg per order (USA up to 5 kg).", "พัสดุต่างประเทศ: ไม่เกิน 2 กก. ต่อออเดอร์ (อเมริกาไม่เกิน 5 กก.)"],
+  ["Damaged or missing item? Film an unboxing video and contact CAYSROOM LINE OFFICIAL within 7 days.", "สินค้าชำรุด/ขาด: ถ่ายวิดีโอขณะเปิดพัสดุ และแจ้ง CAYSROOM LINE OFFICIAL ภายใน 7 วัน"]
+ ],
  "products": [
   {
    "code": "LS",
@@ -17,59 +28,13 @@ window.CAYS_ORDER = {
    "price": 1150,
    "sizeNote": "S chest 40\" length 24\" · M chest 44\" length 25\" · L chest 50\" length 27\"",
    "photo": "",
+   "colors": ["Strawberry", "Grey", "Sunny"],
    "rows": [
-    [
-     "Strawberry - S",
-     "Strawberry",
-     "S"
-    ],
-    [
-     "Strawberry - M",
-     "Strawberry",
-     "M"
-    ],
-    [
-     "Strawberry - L",
-     "Strawberry",
-     "L"
-    ],
-    [
-     "Grey - S",
-     "Grey",
-     "S"
-    ],
-    [
-     "Grey - M",
-     "Grey",
-     "M"
-    ],
-    [
-     "Grey - L",
-     "Grey",
-     "L"
-    ],
-    [
-     "Sunny - S",
-     "Sunny",
-     "S"
-    ],
-    [
-     "Sunny - M",
-     "Sunny",
-     "M"
-    ],
-    [
-     "Sunny - L",
-     "Sunny",
-     "L"
-    ]
+    ["Strawberry - S", "Strawberry", "S"], ["Strawberry - M", "Strawberry", "M"], ["Strawberry - L", "Strawberry", "L"],
+    ["Grey - S", "Grey", "S"], ["Grey - M", "Grey", "M"], ["Grey - L", "Grey", "L"],
+    ["Sunny - S", "Sunny", "S"], ["Sunny - M", "Sunny", "M"], ["Sunny - L", "Sunny", "L"]
    ],
-   "colors": [
-    "Strawberry",
-    "Grey",
-    "Sunny"
-   ],
-   "weight": 400
+   "weights": { "S": 350, "M": 400, "L": 450 }
   },
   {
    "code": "BT",
@@ -77,209 +42,71 @@ window.CAYS_ORDER = {
    "price": 750,
    "sizeNote": "S chest 33\" length 17\" · M chest 36\" length 18\" · L chest 40\" length 19\"",
    "photo": "",
+   "colors": ["Day", "Night"],
    "rows": [
-    [
-     "Day - S",
-     "Day",
-     "S"
-    ],
-    [
-     "Day - M",
-     "Day",
-     "M"
-    ],
-    [
-     "Day - L",
-     "Day",
-     "L"
-    ],
-    [
-     "Night - S",
-     "Night",
-     "S"
-    ],
-    [
-     "Night - M",
-     "Night",
-     "M"
-    ],
-    [
-     "Night - L",
-     "Night",
-     "L"
-    ]
+    ["Day - S", "Day", "S"], ["Day - M", "Day", "M"], ["Day - L", "Day", "L"],
+    ["Night - S", "Night", "S"], ["Night - M", "Night", "M"], ["Night - L", "Night", "L"]
    ],
-   "colors": [
-    "Day",
-    "Night"
-   ],
-   "weight": 300
+   "weights": { "S": 300, "M": 350, "L": 400 }
   },
   {
    "code": "OT",
-   "name": "MIST OVERSIZE TEE",
+   "name": "OVERSIZE TEE",
    "price": 1090,
    "sizeNote": "S chest 44\" length 29\" · M chest 48\" length 30\" · L chest 52\" length 31\"",
    "photo": "",
+   "colors": ["Sea", "Sand"],
    "rows": [
-    [
-     "Sea - S",
-     "Sea",
-     "S"
-    ],
-    [
-     "Sea - M",
-     "Sea",
-     "M"
-    ],
-    [
-     "Sea - L",
-     "Sea",
-     "L"
-    ],
-    [
-     "Sand - S",
-     "Sand",
-     "S"
-    ],
-    [
-     "Sand - M",
-     "Sand",
-     "M"
-    ],
-    [
-     "Sand - L",
-     "Sand",
-     "L"
-    ]
+    ["Sea - S", "Sea", "S"], ["Sea - M", "Sea", "M"], ["Sea - L", "Sea", "L"],
+    ["Sand - S", "Sand", "S"], ["Sand - M", "Sand", "M"], ["Sand - L", "Sand", "L"]
    ],
-   "colors": [
-    "Sea",
-    "Sand"
-   ],
-   "weight": 300
+   "weights": { "S": 500, "M": 550, "L": 600 }
   }
  ],
  "methods": [
-  {
-   "id": "PICKUP",
-   "form": "pickup",
-   "label": "Pick up at the booth (free) / รับที่บูธ (ฟรี)",
-   "sub": "LYKN REFLEXION CONCERT · Fri 23 Oct, Sat 24 Oct, Sun 25 Oct · 9:00–16:00 (GMT+7)"
-  },
-  {
-   "id": "TH",
-   "form": "ship",
-   "label": "Thai address (free) / ส่งในไทย (ฟรี)",
-   "sub": "Delivered to your door in Thailand"
-  },
-  {
-   "id": "CARGO",
-   "form": "ship",
-   "label": "My Thai cargo forwarder (free) / คาร์โก้ของฉัน (ฟรี)",
-   "sub": "We send it to your cargo company's warehouse in Thailand"
-  },
-  {
-   "id": "INTL",
-   "form": "ship",
-   "label": "International door-to-door / ส่งต่างประเทศ",
-   "sub": "Shipping calculated from your parcel weight"
-  }
+  { "id": "PICKUP", "label": "Pick up at the booth (free) / รับที่บูธ (ฟรี)", "sub": "LYKN REFLEXION CONCERT · Fri 23, Sat 24, Sun 25 Oct · 9:00–16:00. Choose your day in the form." },
+  { "id": "TH", "label": "Thai address (free) / ส่งในไทย (ฟรี)", "sub": "Door to door in Thailand · ships from 7 Nov" },
+  { "id": "CARGO", "label": "My Thai cargo forwarder (free) / คาร์โก้ของฉัน (ฟรี)", "sub": "To your forwarder's warehouse in Thailand · ships from 7 Nov" },
+  { "id": "INTL", "label": "International door-to-door / ส่งต่างประเทศ", "sub": "Fee by parcel weight and country · ships from 7 Nov" }
  ],
- "forms": {
-  "ship": {
-   "url": "https://docs.google.com/forms/d/e/1FAIpQLSdwikLTYrs6mZ6yrpj-i4F-RiAdyNNq5GU3CXqZ0H8KL7MYvA/viewform",
-   "open": false,
-   "rows": {
-    "LS": {
-     "Strawberry - S": "entry.753807800",
-     "Strawberry - M": "entry.901644318",
-     "Strawberry - L": "entry.122767324",
-     "Grey - S": "entry.1503711414",
-     "Grey - M": "entry.1761114765",
-     "Grey - L": "entry.1016955243",
-     "Sunny - S": "entry.1526011978",
-     "Sunny - M": "entry.874623834",
-     "Sunny - L": "entry.837657522"
-    },
-    "BT": {
-     "Day - S": "entry.1634795681",
-     "Day - M": "entry.1018691153",
-     "Day - L": "entry.60102787",
-     "Night - S": "entry.1472660424",
-     "Night - M": "entry.1090545493",
-     "Night - L": "entry.270834023"
-    },
-    "OT": {
-     "Sea - S": "entry.1553098136",
-     "Sea - M": "entry.1938050317",
-     "Sea - L": "entry.1868630962",
-     "Sand - S": "entry.2121344426",
-     "Sand - M": "entry.259811026",
-     "Sand - L": "entry.1384327266"
-    }
+ "form": {
+  "url": "https://docs.google.com/forms/d/e/1FAIpQLSdNZ2TCqdRapRPVkrEOYALxZNG6b4zVAx9l1wTZQeK3P-Ju_w/viewform",
+  "open": true,
+  "rows": {
+   "LS": {
+    "Strawberry - S": "entry.1250884974", "Strawberry - M": "entry.395466195", "Strawberry - L": "entry.1808123458",
+    "Grey - S": "entry.466429423", "Grey - M": "entry.50846189", "Grey - L": "entry.507888972",
+    "Sunny - S": "entry.918024581", "Sunny - M": "entry.152542474", "Sunny - L": "entry.1690815186"
    },
-   "amount": "entry.356386998",
-   "fee": "entry.999495196",
-   "country": "entry.1360639707",
-   "method": "entry.1187128505",
-   "methodValues": {
-    "TH": "Thai address (free) / ส่งถึงบ้านในไทย (ฟรี)",
-    "CARGO": "My own Thai cargo forwarder (free) / ส่งผ่านคาร์โก้ของฉันในไทย (ฟรี)",
-    "INTL": "International door-to-door (+ shipping fee) / ส่งตรงต่างประเทศ (มีค่าส่ง)"
+   "BT": {
+    "Day - S": "entry.654414727", "Day - M": "entry.523019012", "Day - L": "entry.1791925453",
+    "Night - S": "entry.1083494800", "Night - M": "entry.80540223", "Night - L": "entry.975202606"
+   },
+   "OT": {
+    "Sea - S": "entry.818134032", "Sea - M": "entry.1177335865", "Sea - L": "entry.479357972",
+    "Sand - S": "entry.967687514", "Sand - M": "entry.1967692765", "Sand - L": "entry.161819371"
    }
   },
-  "pickup": {
-   "url": "https://docs.google.com/forms/d/e/1FAIpQLSc8ERYx8fJ2TExTaGKI5UaMYSHgJW95faNxQaXATvVV3l24Vw/viewform",
-   "open": true,
-   "rows": {
-    "LS": {
-     "Strawberry - S": "entry.418698087",
-     "Strawberry - M": "entry.342428860",
-     "Strawberry - L": "entry.495093327",
-     "Grey - S": "entry.293686030",
-     "Grey - M": "entry.1473455446",
-     "Grey - L": "entry.946928287",
-     "Sunny - S": "entry.295723924",
-     "Sunny - M": "entry.780872239",
-     "Sunny - L": "entry.932012398"
-    },
-    "BT": {
-     "Day - S": "entry.110609730",
-     "Day - M": "entry.1222822625",
-     "Day - L": "entry.1085839188",
-     "Night - S": "entry.1921275078",
-     "Night - M": "entry.1371393658",
-     "Night - L": "entry.1448316849"
-    },
-    "OT": {
-     "Sea - S": "entry.1788854285",
-     "Sea - M": "entry.410208333",
-     "Sea - L": "entry.700787867",
-     "Sand - S": "entry.576430887",
-     "Sand - M": "entry.496159770",
-     "Sand - L": "entry.848123127"
-    }
-   },
-   "amount": "entry.1849802406"
-  }
+  "ship": "entry.1152750563",
+  "shipValues": {
+   "PICKUP": "SELF-PICK UP / รับสินค้าด้วยตัวเอง",
+   "DELIVERY": "DELIVERY (ships from 7 Nov) / จัดส่งถึงบ้าน เริ่มจัดส่ง 7 พ.ย."
+  },
+  "option": "entry.1936939119",
+  "optionValues": {
+   "TH": "OPTION 1 - Thai Domestic / ที่อยู่ในประเทศไทย",
+   "CARGO": "OPTION 1 - Thai Domestic / ที่อยู่ในประเทศไทย",
+   "INTL": "OPTION 2 - International Shipping / จัดส่งต่างประเทศ"
+  },
+  "country": "entry.1696074321",
+  "fee": "entry.621758904",
+  "amount": "entry.24180669"
  },
  "bank": "KASIKORNBANK · THADAN CO., LTD. · 216-1-38490-1",
  "qr": "",
  "line": "CAYSROOM LINE OFFICIAL",
  "sizeGuide": "",
- "popular": [
-  "Japan",
-  "South Korea",
-  "Taiwan",
-  "Hong Kong",
-  "Singapore",
-  "Philippines",
-  "Indonesia",
-  "Malaysia",
-  "United States (Mainland)",
-  "United Kingdom"
- ],
+ "popular": ["Japan", "South Korea", "Taiwan", "Hong Kong", "Singapore", "Philippines", "Indonesia", "Malaysia", "United States (Mainland)", "United Kingdom"],
  "stock": {},
  "lowStock": 5
 };

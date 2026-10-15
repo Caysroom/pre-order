@@ -47,10 +47,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
 
 .notice { margin-top: 16px; background: var(--white); border: 1.5px solid var(--clay); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
 .notice h2 { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--clay-dark); }
-.notice ul { list-style: none; display: grid; gap: 8px; }
-.notice li { font-size: 13.5px; padding-left: 14px; position: relative; }
-.notice li::before { content: ''; position: absolute; left: 0; top: .6em; width: 5px; height: 5px; border-radius: 50%; background: var(--clay); }
+.notice ol { list-style: none; display: grid; gap: 10px; }
+.notice li { font-size: 13.5px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: baseline; }
+.notice li .no { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--clay-pale); background: var(--choc); padding: 3px 8px; border-radius: 20px; white-space: nowrap; min-width: 62px; text-align: center; }
 .notice li .th { display: block; color: var(--smoke); font-size: 12.5px; }
+.item-note { font-size: 13.5px; padding: 10px 12px; border-radius: 8px; background: var(--clay-pale); color: var(--choc); font-weight: 600; margin-top: 6px; }
+.item-note .th { display: block; font-weight: 500; font-size: 12.5px; }
 .step-head { display: grid; gap: 2px; }
 .step-no { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--clay-dark); }
 .step-title { font-family: var(--serif); font-weight: 400; font-size: 24px; line-height: 1.2; }
@@ -177,7 +179,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
       <span class="status" id="status"></span>
       <div class="notice" id="notice" hidden>
         <h2>Before you order · อ่านก่อนสั่งซื้อ</h2>
-        <ul id="noticeList"></ul>
+        <ol id="noticeList"></ol>
       </div>
     </section>
 
@@ -186,6 +188,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, .method:focus-within
         <span class="step-no">Step 1</span>
         <h2 class="step-title" id="s1">Pick your items · เลือกสินค้า</h2>
         <span class="step-hint" id="s1hint"></span>
+        <div class="item-note" id="itemNote" hidden></div>
       </div>
       <div class="section" id="products"></div>
     </section>
@@ -297,11 +300,17 @@ function start(D) {
   });
   if (D.notice && D.notice.length) {
     $('notice').hidden = false;
-    D.notice.forEach(function (n) {
-      var li = el('li'); li.appendChild(document.createTextNode(Array.isArray(n) ? n[0] : n));
-      if (Array.isArray(n) && n[1]) li.appendChild(el('span', 'th', n[1]));
-      $('noticeList').appendChild(li);
+    D.notice.forEach(function (n, i) {
+      var li = el('li'); li.appendChild(el('span', 'no', 'Step ' + (i + 1)));
+      var txt = el('span'); txt.appendChild(document.createTextNode(Array.isArray(n) ? n[0] : n));
+      if (Array.isArray(n) && n[1]) txt.appendChild(el('span', 'th', n[1]));
+      li.appendChild(txt); $('noticeList').appendChild(li);
     });
+  }
+  if (D.itemNote && D.itemNote.length) {   // e.g. the overseas weight limit, shown under "Pick your items"
+    $('itemNote').hidden = false;
+    $('itemNote').appendChild(document.createTextNode(D.itemNote[0]));
+    if (D.itemNote[1]) $('itemNote').appendChild(el('span', 'th', D.itemNote[1]));
   }
   $('s1hint').textContent = 'Tap + to add. Up to ' + maxQ + ' per colour and size.' ;
   if (D.sizeGuide) { var sg = el('a', null, ' Size guide →'); sg.href = D.sizeGuide; sg.target = '_blank'; sg.rel = 'noopener'; $('s1hint').appendChild(sg); }

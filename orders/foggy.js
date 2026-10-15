@@ -9,13 +9,13 @@ window.CAYS_ORDER = {
  "opens": "2026-10-17T14:00:00.000Z",
  "closes": "2026-10-20T16:59:00.000Z",
  "shipStart": "7 Nov 2026",
- "publishedAt": "15 Oct 2026, 23:45 (Thai time)",
+ "publishedAt": "16 Oct 2026, 00:15 (Thai time)",
  "maxQ": 5,
  "packaging": 50,
  "buffer": 40,
+ "itemNote": ["Overseas parcels: up to 2 kg per order (USA up to 5 kg).", "พัสดุต่างประเทศ: ไม่เกิน 2 กก. ต่อออเดอร์ (อเมริกาไม่เกิน 5 กก.)"],
  "notice": [
   ["Add your wishlist.", "เลือกสินค้า"],
-  ["Overseas parcels: up to 2 kg per order (USA up to 5 kg).", "พัสดุต่างประเทศ: ไม่เกิน 2 กก. ต่อออเดอร์ (อเมริกาไม่เกิน 5 กก.)"],
   ["Choose your delivery method to calculate shipping.", "เลือกวิธีจัดส่ง เพื่อคำนวนค่าส่ง"],
   ["Your order summary on the right (below on phones) shows the total you need to pay.", "หน้าจอด้านขวาจะแสดงยอดที่คุณต้องชำระ"],
   ["Tap “Continue to order form” and our order form opens right away. Once you accept the terms, your items and the amount to pay are filled in for you. Please check everything is correct before paying.", "กด continue to order form เว็บไซต์จะเปลี่ยนเป็น form สั่งซื้อของเราทันที เมื่อคุณกดยอมรับเงื่อนไข ข้อมูลสินค้าที่คุณเลือก และ ยอดที่ต้องชำระ จะถูกกรอกให้คุณอัตโนมัติ กรุณาตรวจสอบความถูกต้องก่อนชำระเงิน"]

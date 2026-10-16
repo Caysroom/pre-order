@@ -81,8 +81,9 @@ h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 6vw, 38
 .btn { display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--choc); background: transparent; color: var(--choc); padding: 10px 14px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; }
 .btn.primary { background: var(--choc); color: var(--clay-pale); }
 .btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
-.how { display: grid; gap: 8px; font-size: 13.5px; }
-.how li { margin-left: 18px; }
+.how { list-style: none; display: grid; gap: 10px; }
+.how li { font-size: 13.5px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: baseline; }
+.how li .no { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--clay-pale); background: var(--choc); padding: 3px 8px; border-radius: 20px; white-space: nowrap; min-width: 62px; text-align: center; }
 .how li .th { display: block; color: var(--smoke); font-size: 12.5px; }
 .foot { text-align: center; padding: 8px 16px 40px; font-size: 12px; color: var(--smoke); }
 .loading { padding: 80px 16px; text-align: center; color: var(--smoke); }
@@ -101,6 +102,16 @@ h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 6vw, 38
     <h1>Shipping fee calculator</h1>
     <p class="lead">For international door-to-door delivery only. Booth pickup and Thai addresses ship free.
       <span class="th">สำหรับจัดส่งต่างประเทศเท่านั้น รับที่บูธและส่งในไทยไม่มีค่าส่ง</span></p>
+  </section>
+
+  <section class="card" aria-labelledby="l3">
+    <div class="label" id="l3">How to order · วิธีสั่งซื้อ</div>
+    <ol class="how">
+      <li><span class="no">Step 1</span><span>Note your shipping fee below.<span class="th">จดค่าจัดส่งด้านล่างไว้</span></span></li>
+      <li><span class="no">Step 2</span><span>Open the order form and choose your colours, sizes and quantities.<span class="th">เปิดฟอร์มสั่งซื้อ แล้วเลือกสี ไซส์ และจำนวนสินค้า</span></span></li>
+      <li><span class="no">Step 3</span><span>Choose Delivery → International Shipping, and type your shipping fee in "SHIPPING FEE (THB)".<span class="th">เลือกจัดส่ง → ต่างประเทศ แล้วกรอกค่าจัดส่งในช่อง "SHIPPING FEE (THB)"</span></span></li>
+      <li><span class="no">Step 4</span><span>Pay items + shipping, then type that total in "TRANSFER AMOUNT".<span class="th">ชำระค่าสินค้า + ค่าจัดส่ง แล้วกรอกยอดรวมในช่อง "TRANSFER AMOUNT"</span></span></li>
+    </ol>
   </section>
 
   <section class="card" aria-labelledby="l1">
@@ -136,15 +147,6 @@ h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 6vw, 38
     </div>
   </section>
 
-  <section class="card" aria-labelledby="l3">
-    <div class="label" id="l3">How to order · วิธีสั่งซื้อ</div>
-    <ol class="how">
-      <li>Note your shipping fee above.<span class="th">จดค่าจัดส่งด้านบนไว้</span></li>
-      <li>Open the order form and choose your colours, sizes and quantities.<span class="th">เปิดฟอร์มสั่งซื้อ แล้วเลือกสี ไซส์ และจำนวนสินค้า</span></li>
-      <li>Choose Delivery → International Shipping, and type your shipping fee in "SHIPPING FEE (THB)".<span class="th">เลือกจัดส่ง → ต่างประเทศ แล้วกรอกค่าจัดส่งในช่อง "SHIPPING FEE (THB)"</span></li>
-      <li>Pay items + shipping, then type that total in "TRANSFER AMOUNT".<span class="th">ชำระค่าสินค้า + ค่าจัดส่ง แล้วกรอกยอดรวมในช่อง "TRANSFER AMOUNT"</span></li>
-    </ol>
-  </section>
 </main>
 <div class="foot" id="foot">Prices in Thai Baht (THB) · Shipping from Thailand</div>
 

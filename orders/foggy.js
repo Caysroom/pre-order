@@ -146,8 +146,7 @@ window.CAYS_ORDER = {
    "sizeNote": "S chest 44\" length 29\" · M chest 48\" length 30\" · L chest 52\" length 31\"",
    "photo": "",
    "colors": [
-    "Sea",
-    "Sand"
+    "Sea"
    ],
    "rows": [
     [
@@ -163,21 +162,6 @@ window.CAYS_ORDER = {
     [
      "Sea - L",
      "Sea",
-     "L"
-    ],
-    [
-     "Sand - S",
-     "Sand",
-     "S"
-    ],
-    [
-     "Sand - M",
-     "Sand",
-     "M"
-    ],
-    [
-     "Sand - L",
-     "Sand",
      "L"
     ]
    ],
@@ -227,10 +211,7 @@ window.CAYS_ORDER = {
    "OT": {
     "Sea - S": "entry.818134032",
     "Sea - M": "entry.1177335865",
-    "Sea - L": "entry.479357972",
-    "Sand - S": "entry.967687514",
-    "Sand - M": "entry.1967692765",
-    "Sand - L": "entry.161819371"
+    "Sea - L": "entry.479357972"
    }
   },
   "ship": "entry.1152750563",
@@ -281,10 +262,7 @@ window.CAYS_ORDER = {
   "BT-NIGHT-L": 1,
   "OT-SEA-S": 1,
   "OT-SEA-M": 1,
-  "OT-SEA-L": 1,
-  "OT-SAND-S": 1,
-  "OT-SAND-M": 1,
-  "OT-SAND-L": 1
+  "OT-SEA-L": 1
  },
  "lowStock": 5
 };

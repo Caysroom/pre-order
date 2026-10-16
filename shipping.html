@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CAYS · International Shipping Fee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Plan B: shipping-fee calculator only. Customers fill in the order form themselves.
+   Products, weights and countries come from orders/<key>.js and rates.js (same data as the order page). */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+:root {
+  --ink: #1a1a18; --choc: #4a3424; --sand: #f5f0e8; --clay: #c8a97e; --clay-dark: #a8845a;
+  --clay-pale: #ecdfc8; --smoke: #6b6860; --fog: #e4dfd6; --white: #fdfcfa;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', 'IBM Plex Sans Thai', system-ui, sans-serif;
+  --mono: 'DM Mono', ui-monospace, monospace;
+  color-scheme: light;
+}
+html, body { background: var(--sand); }
+body { font-family: var(--sans); color: var(--ink); font-size: 15px; line-height: 1.5; min-height: 100vh; }
+button, input { font: inherit; color: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--clay-dark); outline-offset: 2px; }
+
+.header { background: var(--choc); padding: calc(20px + env(safe-area-inset-top, 0px)) 48px 20px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.brand-name { font-family: var(--serif); font-size: 34px; color: var(--clay); letter-spacing: .1em; line-height: 1; }
+.brand-sub { font-size: 10.5px; font-weight: 600; color: #e8ddc8; letter-spacing: .22em; text-transform: uppercase; }
+.clay-bar { background: var(--clay); padding: 10px 48px; font-size: 11px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
+
+.main { max-width: 760px; margin: 0 auto; padding: 32px 24px 64px; display: grid; gap: 24px; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 6vw, 38px); line-height: 1.1; }
+.lead { color: var(--smoke); margin-top: 6px; }
+.lead .th { display: block; font-size: 13.5px; }
+
+.card { background: var(--white); border: 1.5px solid var(--fog); border-radius: 10px; padding: 18px; display: grid; gap: 14px; }
+.label { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--clay-dark); }
+.note { font-size: 13.5px; padding: 10px 12px; border-radius: 8px; background: var(--clay-pale); color: var(--choc); font-weight: 600; }
+.note .th { display: block; font-weight: 500; font-size: 12.5px; }
+
+.item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--fog); }
+.item:first-of-type { border-top: 0; }
+.i-name { font-weight: 700; font-size: 15px; }
+.i-sub { font-size: 12.5px; color: var(--smoke); }
+.stepper { display: flex; align-items: center; border: 1.5px solid var(--fog); border-radius: 8px; background: var(--sand); }
+.stepper.on { border-color: var(--clay); background: var(--clay-pale); }
+.stepper button { border: 0; background: transparent; width: 40px; height: 40px; font-family: var(--mono); font-size: 20px; cursor: pointer; }
+.stepper button:disabled { color: var(--fog); cursor: default; }
+.stepper output { font-family: var(--mono); font-weight: 500; min-width: 22px; text-align: center; }
+
+.picked { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--clay-pale); border-radius: 8px; }
+.picked .flag { font-size: 22px; } .picked .nm { font-weight: 700; flex: 1; min-width: 0; }
+.linkbtn { background: none; border: 0; color: var(--clay-dark); font-weight: 600; cursor: pointer; text-decoration: underline; }
+.search { width: 100%; padding: 11px 12px; border: 1.5px solid var(--fog); border-radius: 8px; background: var(--sand); }
+.search:focus { outline: none; border-color: var(--clay); }
+.quick { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1.5px solid var(--fog); background: var(--sand); border-radius: 20px; padding: 5px 10px; font-size: 13px; cursor: pointer; }
+.chip:hover { border-color: var(--clay); }
+.clist { max-height: 240px; overflow-y: auto; border: 1px solid var(--fog); border-radius: 8px; }
+.crow { display: flex; gap: 10px; width: 100%; text-align: left; padding: 9px 12px; border: 0; border-bottom: 1px solid var(--fog); background: var(--white); cursor: pointer; font-size: 14px; }
+.crow:hover { background: var(--clay-pale); }
+.cempty { padding: 12px; font-size: 13px; color: var(--smoke); }
+
+.result { background: var(--white); border: 1.5px solid var(--clay); border-radius: 10px; overflow: hidden; }
+.r-head { background: var(--choc); color: var(--clay-pale); padding: 14px 18px; font-family: var(--serif); font-size: 20px; color: var(--clay); }
+.r-body { padding: 18px; display: grid; gap: 12px; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; }
+.row span:last-child { font-family: var(--mono); white-space: nowrap; }
+.meter { position: relative; height: 12px; border-radius: 6px; background: var(--sand); border: 1px solid var(--fog); overflow: hidden; }
+.meter .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--clay); transition: width .25s; }
+.meter .fill.over { background: #b5654a; }
+.fee { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; border-top: 1.5px solid var(--ink); padding-top: 12px; }
+.fee .big { font-family: var(--mono); font-size: 36px; font-weight: 500; line-height: 1; }
+.fee small { display: block; font-size: 12.5px; color: var(--smoke); }
+.muted { font-size: 13px; color: var(--smoke); }
+.alert { font-size: 14.5px; font-weight: 700; padding: 12px 14px; border-radius: 8px; background: #fbe1da; color: #9b2c1f; border: 2px solid #c0533f; }
+.alert .th { display: block; font-weight: 600; font-size: 13px; }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--choc); background: transparent; color: var(--choc); padding: 10px 14px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; }
+.btn.primary { background: var(--choc); color: var(--clay-pale); }
+.btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+.how { display: grid; gap: 8px; font-size: 13.5px; }
+.how li { margin-left: 18px; }
+.how li .th { display: block; color: var(--smoke); font-size: 12.5px; }
+.foot { text-align: center; padding: 8px 16px 40px; font-size: 12px; color: var(--smoke); }
+.loading { padding: 80px 16px; text-align: center; color: var(--smoke); }
+@media (max-width: 680px) { .header, .clay-bar { padding-left: 16px; padding-right: 16px; } .main { padding: 24px 16px 56px; } .brand-name { font-size: 28px; } }
+@media (prefers-reduced-motion: reduce) { .meter .fill { transition: none; } }
+</style>
+</head>
+<body>
+<header class="header"><span class="brand-name">CAYS</span><span class="brand-sub">International shipping fee</span></header>
+<div class="clay-bar">Ships from Thailand · Worldwide</div>
+
+<div class="loading" id="loading">Loading…</div>
+
+<main class="main" id="app" hidden>
+  <section>
+    <h1>Shipping fee calculator</h1>
+    <p class="lead">For international door-to-door delivery only. Booth pickup and Thai addresses ship free.
+      <span class="th">สำหรับจัดส่งต่างประเทศเท่านั้น รับที่บูธและส่งในไทยไม่มีค่าส่ง</span></p>
+  </section>
+
+  <section class="card" aria-labelledby="l1">
+    <div class="label" id="l1">1 · How many pieces? · จำนวนสินค้า</div>
+    <div class="note" id="itemNote" hidden></div>
+    <div id="items"></div>
+  </section>
+
+  <section class="card" aria-labelledby="l2">
+    <div class="label" id="l2">2 · Ship to · ประเทศปลายทาง</div>
+    <div class="picked" id="picked" hidden><span class="flag" id="pFlag"></span><span class="nm" id="pName"></span><button class="linkbtn" type="button" id="change">Change</button></div>
+    <div id="chooser">
+      <div class="quick" id="quick"></div>
+      <input class="search" id="csearch" type="search" placeholder="Search your country…" autocomplete="off" aria-label="Search your country" style="margin-top:10px">
+      <div class="clist" id="clist" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <section class="result" aria-labelledby="rh">
+    <div class="r-head" id="rh">Your shipping fee</div>
+    <div class="r-body">
+      <div class="row"><span>Parcel weight (packed)</span><span><span id="wNow">0 g</span> / <span id="wMax">2,000 g</span> max</span></div>
+      <div class="meter" aria-hidden="true"><div class="fill" id="fill"></div></div>
+      <div class="alert" id="over" role="alert" hidden></div>
+      <div class="fee"><span><strong>Shipping fee</strong><small>ค่าจัดส่ง (THB)</small></span><span class="big" id="fee">–</span></div>
+      <div class="row muted"><span>Items (for reference) · ราคาสินค้า</span><span id="sub">0</span></div>
+      <div class="row muted"><span>Items + shipping · รวม</span><span id="total">0</span></div>
+      <p class="muted" id="hint">Add your items and choose your country. · เลือกจำนวนสินค้าและประเทศ</p>
+      <div class="btns">
+        <button class="btn" type="button" id="copyFee" aria-disabled="true">Copy shipping fee</button>
+        <a class="btn primary" id="goForm" href="#" target="_blank" rel="noopener">Open order form →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="l3">
+    <div class="label" id="l3">How to order · วิธีสั่งซื้อ</div>
+    <ol class="how">
+      <li>Note your shipping fee above.<span class="th">จดค่าจัดส่งด้านบนไว้</span></li>
+      <li>Open the order form and choose your colours, sizes and quantities.<span class="th">เปิดฟอร์มสั่งซื้อ แล้วเลือกสี ไซส์ และจำนวนสินค้า</span></li>
+      <li>Choose Delivery → International Shipping, and type your shipping fee in "SHIPPING FEE (THB)".<span class="th">เลือกจัดส่ง → ต่างประเทศ แล้วกรอกค่าจัดส่งในช่อง "SHIPPING FEE (THB)"</span></li>
+      <li>Pay items + shipping, then type that total in "TRANSFER AMOUNT".<span class="th">ชำระค่าสินค้า + ค่าจัดส่ง แล้วกรอกยอดรวมในช่อง "TRANSFER AMOUNT"</span></li>
+    </ol>
+  </section>
+</main>
+<div class="foot" id="foot">Prices in Thai Baht (THB) · Shipping from Thailand</div>
+
+<script src="rates.js"></script>
+<script>
+var DEFAULT_COLLECTION = 'foggy';
+(function () {
+  var key = (new URLSearchParams(location.search).get('c') || DEFAULT_COLLECTION).toLowerCase();
+  if (!/^[a-z0-9-]+$/.test(key)) key = DEFAULT_COLLECTION;
+  var s = document.createElement('script');
+  s.src = 'orders/' + key + '.js?v=' + Math.floor(Date.now() / 300000);
+  s.onload = function () { start(window.CAYS_ORDER); };
+  s.onerror = function () { document.getElementById('loading').textContent = 'This page could not load. Please try again later.'; };
+  document.head.appendChild(s);
+})();
+
+function start(D) {
+  if (!D) { document.getElementById('loading').textContent = 'This page could not load.'; return; }
+  var SHIP = window.CAYS_SHIP, products = D.products || [], maxQ = 20;
+  var state = { qty: {}, country: '' };
+  try { var sv = JSON.parse(localStorage.getItem('cays-ship-' + (D.key || 'x')) || 'null'); if (sv && sv.qty) state = sv; } catch (e) {}
+  function save() { try { localStorage.setItem('cays-ship-' + (D.key || 'x'), JSON.stringify(state)); } catch (e) {} }
+  function $(id) { return document.getElementById(id); }
+  function el(t, c, txt) { var e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e; }
+  function fmt(n) { return Number(n || 0).toLocaleString('en-US'); }
+  function flagOf(c) { return (SHIP.FLAGS && SHIP.FLAGS[c]) || '🌍'; }
+  /* one weight per product; if a product has weights per size, use the heaviest so the fee is never too low */
+  function weightOf(p) { if (p.weight) return p.weight; var w = p.weights ? Object.keys(p.weights).map(function (k) { return p.weights[k]; }) : []; return w.length ? Math.max.apply(null, w) : 0; }
+
+  $('loading').hidden = true; $('app').hidden = false;
+  document.title = 'CAYS · ' + (D.collection || '') + ' · Shipping fee';
+  $('rh').textContent = 'Your shipping fee · ' + (D.collection || '');
+  if (D.itemNote && D.itemNote.length) { $('itemNote').hidden = false; $('itemNote').appendChild(document.createTextNode(D.itemNote[0])); if (D.itemNote[1]) $('itemNote').appendChild(el('span', 'th', D.itemNote[1])); }
+  if (D.publishedAt) $('foot').textContent += ' · Updated ' + D.publishedAt;
+  var formUrl = D.form && D.form.url; if (formUrl) $('goForm').href = formUrl; else $('goForm').hidden = true;
+
+  products.forEach(function (p) {
+    var row = el('div', 'item'), left = el('div');
+    left.appendChild(el('div', 'i-name', p.name));
+    left.appendChild(el('div', 'i-sub', fmt(p.price) + ' THB · ' + fmt(weightOf(p)) + ' g each · all colours and sizes'));
+    var st = el('div', 'stepper'), minus = el('button', null, '−'), out = el('output'), plus = el('button', null, '+');
+    minus.type = plus.type = 'button';
+    minus.setAttribute('aria-label', 'Remove one ' + p.name); plus.setAttribute('aria-label', 'Add one ' + p.name);
+    function paint() { var q = state.qty[p.code] || 0; out.textContent = q; minus.disabled = q <= 0; plus.disabled = q >= maxQ; st.classList.toggle('on', q > 0); }
+    minus.onclick = function () { state.qty[p.code] = Math.max(0, (state.qty[p.code] || 0) - 1); paint(); update(); };
+    plus.onclick = function () { state.qty[p.code] = Math.min(maxQ, (state.qty[p.code] || 0) + 1); paint(); update(); };
+    st.appendChild(minus); st.appendChild(out); st.appendChild(plus);
+    row.appendChild(left); row.appendChild(st); $('items').appendChild(row); paint();
+  });
+
+  var names = SHIP.DEST.map(function (d) { return d[0]; });
+  if (state.country && names.indexOf(state.country) < 0) state.country = '';
+  (D.popular || []).filter(function (n) { return names.indexOf(n) >= 0; }).forEach(function (n) {
+    var b = el('button', 'chip', flagOf(n) + ' ' + n.replace(' (Mainland)', '')); b.type = 'button'; b.onclick = function () { pick(n); }; $('quick').appendChild(b);
+  });
+  function renderList(q) {
+    var box = $('clist'); box.innerHTML = '';
+    var list = names.filter(function (n) { return n.toLowerCase().indexOf(q.toLowerCase()) >= 0; });
+    if (!list.length) box.appendChild(el('div', 'cempty', 'No match. We may not ship there yet. Please ask ' + (D.line || 'us') + '.'));
+    list.forEach(function (n) { var b = el('button', 'crow'); b.type = 'button'; b.appendChild(el('span', null, flagOf(n))); b.appendChild(el('span', null, n)); b.onclick = function () { pick(n); }; box.appendChild(b); });
+  }
+  function pick(n) { state.country = n; $('csearch').value = ''; renderList(''); update(); }
+  $('csearch').oninput = function () { renderList(this.value); };
+  $('change').onclick = function () { state.country = ''; update(); $('csearch').focus(); };
+  renderList('');
+
+  function update() {
+    var items = 0, grams = 0, sub = 0;
+    products.forEach(function (p) { var q = state.qty[p.code] || 0; items += q; grams += q * weightOf(p); sub += q * p.price; });
+    if (items) grams += D.packaging || 0;
+    var zone = state.country ? SHIP.zoneOf(state.country) : null, max = zone ? SHIP.maxWeightFor(zone) : 2000;
+    var over = grams > max, ready = !!zone && items > 0 && !over, fee = ready ? SHIP.priceFor(zone, grams, D.buffer || 0) : null;
+    $('picked').hidden = !state.country; $('chooser').hidden = !!state.country;
+    if (state.country) { $('pFlag').textContent = flagOf(state.country); $('pName').textContent = state.country; }
+    $('wNow').textContent = fmt(grams) + ' g'; $('wMax').textContent = fmt(max) + ' g';
+    $('fill').style.width = Math.min(100, grams / max * 100) + '%'; $('fill').classList.toggle('over', over);
+    $('over').hidden = !over; $('over').innerHTML = '';
+    if (over) { $('over').appendChild(document.createTextNode('Your parcel is over the weight limit (' + fmt(grams) + ' g, max ' + fmt(max) + ' g' + (state.country ? ' for ' + state.country : '') + '). Please split it into two orders.')); $('over').appendChild(el('span', 'th', 'พัสดุเกินน้ำหนักที่กำหนด กรุณาแยกเป็น 2 ออเดอร์')); }
+    $('fee').textContent = fee === null ? '–' : fmt(fee);
+    $('sub').textContent = fmt(sub);
+    $('total').textContent = fee === null ? '–' : fmt(sub + fee);
+    $('hint').hidden = ready || over;
+    $('copyFee').setAttribute('aria-disabled', ready ? 'false' : 'true');
+    save();
+    return fee;
+  }
+  $('copyFee').onclick = function () {
+    var fee = update(); if (fee === null) return;
+    var btn = this, o = btn.textContent, done = function () { btn.textContent = 'Copied ✓'; setTimeout(function () { btn.textContent = o; }, 1400); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(String(fee)).then(done, done); else done();
+  };
+  update();
+}
+</script>
+</body>
+</html>

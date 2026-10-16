@@ -72,7 +72,14 @@ h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 6vw, 38
 .meter .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--clay); transition: width .25s; }
 .meter .fill.over { background: #b5654a; }
 .fee { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; border-top: 1.5px solid var(--ink); padding-top: 12px; }
-.fee .big { font-family: var(--mono); font-size: 36px; font-weight: 500; line-height: 1; }
+.fee .big { font-family: var(--mono); font-size: 22px; font-weight: 500; line-height: 1; }
+.fee strong, .amt strong { font-size: 15px; }
+.amt { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.amt small { display: block; font-size: 12.5px; color: var(--smoke); }
+.amt .num { font-family: var(--mono); font-size: 22px; font-weight: 500; line-height: 1; white-space: nowrap; }
+.amt.total { background: var(--clay-pale); border-radius: 8px; padding: 14px; }
+.amt.total strong { font-size: 17px; }
+.amt.total .num { font-size: 34px; font-weight: 700; color: var(--choc); }
 .fee small { display: block; font-size: 12.5px; color: var(--smoke); }
 .muted { font-size: 13px; color: var(--smoke); }
 .alert { font-size: 14.5px; font-weight: 700; padding: 12px 14px; border-radius: 8px; background: #fbe1da; color: #9b2c1f; border: 2px solid #c0533f; }
@@ -138,11 +145,11 @@ h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 6vw, 38
       <div class="meter" aria-hidden="true"><div class="fill" id="fill"></div></div>
       <div class="alert" id="over" role="alert" hidden></div>
       <div class="fee"><span><strong>Shipping fee</strong><small>ค่าจัดส่ง (THB)</small></span><span class="big" id="fee">–</span></div>
-      <div class="row muted"><span>Items (for reference) · ราคาสินค้า</span><span id="sub">0</span></div>
-      <div class="row muted"><span>Items + shipping · รวม</span><span id="total">0</span></div>
+      <div class="amt"><span><strong>Items</strong><small>ราคาสินค้า (THB)</small></span><span class="num" id="sub">0</span></div>
+      <div class="amt total"><span><strong>Total amount</strong><small>ยอดรวม สินค้า + ค่าจัดส่ง (THB)</small></span><span class="num" id="total">–</span></div>
       <p class="muted" id="hint">Add your items and choose your country. · เลือกจำนวนสินค้าและประเทศ</p>
       <div class="btns">
-        <button class="btn" type="button" id="copyFee" aria-disabled="true">Copy shipping fee</button>
+        <button class="btn" type="button" id="copyFee" aria-disabled="true">Copy total amount</button>
       </div>
     </div>
   </section>
@@ -234,8 +241,9 @@ function start(D) {
   }
   $('copyFee').onclick = function () {
     var fee = update(); if (fee === null) return;
+    var total = $('total').textContent.replace(/,/g, '');
     var btn = this, o = btn.textContent, done = function () { btn.textContent = 'Copied ✓'; setTimeout(function () { btn.textContent = o; }, 1400); };
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(String(fee)).then(done, done); else done();
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(total).then(done, done); else done();
   };
   update();
 }

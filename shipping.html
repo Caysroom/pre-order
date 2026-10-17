@@ -192,7 +192,7 @@ function start(D) {
   products.forEach(function (p) {
     var row = el('div', 'item'), left = el('div');
     left.appendChild(el('div', 'i-name', p.name));
-    left.appendChild(el('div', 'i-sub', fmt(p.price) + ' THB · ' + fmt(weightOf(p)) + ' g each · all colours and sizes'));
+    left.appendChild(el('div', 'i-sub', fmt(p.price) + ' THB · all colours and sizes'));
     var st = el('div', 'stepper'), minus = el('button', null, '−'), out = el('output'), plus = el('button', null, '+');
     minus.type = plus.type = 'button';
     minus.setAttribute('aria-label', 'Remove one ' + p.name); plus.setAttribute('aria-label', 'Add one ' + p.name);

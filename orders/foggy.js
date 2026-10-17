@@ -244,25 +244,6 @@ window.CAYS_ORDER = {
   "United States (Mainland)",
   "United Kingdom"
  ],
- "stock": {
-  "LS-STRAWBERRY-S": 1,
-  "LS-STRAWBERRY-M": 1,
-  "LS-STRAWBERRY-L": 1,
-  "LS-GREY-S": 1,
-  "LS-GREY-M": 1,
-  "LS-GREY-L": 1,
-  "LS-SUNNY-S": 1,
-  "LS-SUNNY-M": 1,
-  "LS-SUNNY-L": 1,
-  "BT-DAY-S": 1,
-  "BT-DAY-M": 1,
-  "BT-DAY-L": 1,
-  "BT-NIGHT-S": 1,
-  "BT-NIGHT-M": 1,
-  "BT-NIGHT-L": 1,
-  "OT-SEA-S": 1,
-  "OT-SEA-M": 1,
-  "OT-SEA-L": 1
- },
+ "stock": {},
  "lowStock": 5
 };
